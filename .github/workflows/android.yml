@@ -27,18 +27,11 @@ jobs:
           sdkmanager --install "platforms;android-35" "build-tools;35.0.0" "platform-tools"
           yes | sdkmanager --licenses
 
-      - name: Initialize Gradle wrapper if missing
+      - name: Create Gradle Wrapper from app module
         run: |
-          if [ ! -f gradlew ]; then
-            cd app
-            gradle wrapper --gradle-version 8.7
-            cd ..
-          fi
-
-      - name: Generate Gradle Wrapper (project-aware)
-        run: |
-          ./gradlew wrapper --gradle-version 8.7 || \
-          (echo "gradlew not found, initializing..." && gradle wrapper --gradle-version 8.7 --distribution-type bin)
+          cd app
+          gradle wrapper --gradle-version 8.7 --distribution-type bin
+          cd ..
           chmod +x gradlew
 
       - name: Build Debug APK
